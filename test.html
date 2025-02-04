@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Race Car Data Analyzer</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        /* Previous styles remain */
+        #tooltip { 
+            /* Updated tooltip styling */
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(2px);
+        }
+        .leaflet-control-scale { 
+            margin-bottom: 20px;
+            margin-left: 20px;
+        }
+        .timeline-container {
+            position: absolute;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <button class="tab-btn active" onclick="showPage('upload')">Upload</button>
+        <button class="tab-btn" onclick="showPage('graph')" id="btnGraph" disabled>Graph</button>
+        <button class="tab-btn" onclick="showPage('map')" id="btnMap" disabled>Map</button>
+    </div>
+
+    <div id="uploadPage" class="page active">
+        <div id="dropZone">
+            Drag and drop data file here or<br>
+            <input type="file" id="fileInput" accept=".txt">
+        </div>
+    </div>
+
+    <div id="graphPage" class="page">
+        <div class="columns-selector" id="columnsSelector"></div>
+        <div id="chart" class="chart-container"></div>
+    </div>
+
+    <div id="mapPage" class="page">
+        <div id="map"></div>
+    </div>
+
+    <div id="tooltip"></div>
+
+    <script>
+        // Modified map initialization
+        function initMapView() {
+            if (!map) {
+                map = L.map('map', {
+                    maxZoom: 19,  // Increased max zoom level
+                    zoomControl: false
+                }).setView([52.5317, 6.0921], 13);
+                
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors',
+                    maxZoom: 19  // Match tile layer max zoom
+                }).addTo(map);
+
+                L.control.zoom({ position: 'topright' }).addTo(map);
+                L.control.scale({ imperial: false }).addTo(map);  // Add scale bar
+                
+                // Add timeline container
+                const timeline = L.control({ position: 'bottomleft' });
+                timeline.onAdd = () => {
+                    const div = L.DomUtil.create('div', 'timeline-container');
+                    div.innerHTML = `
+                        <input type="range" id="timeSlider" style="width: 100%">
+                        <div id="timeDisplay"></div>
+                    `;
+                    return div;
+                };
+                timeline.addTo(map);
+            }
+            // Rest of map initialization remains
+        }
+
+        // Enhanced tooltip handling
+        function addMapHover() {
+            const validGPS = allData.filter(d => d.lat && d.lon);
+            const tooltip = document.getElementById('tooltip');
+
+            // Create a highlight marker
+            const highlightMarker = L.circleMarker([0, 0], {
+                radius: 6,
+                color: '#FF0000',
+                fillColor: '#FF0000',
+                fillOpacity: 0.8
+            }).addTo(map);
+
+            map.on('mousemove', (e) => {
+                let closest = validGPS[0];
+                let minDist = Infinity;
+
+                validGPS.forEach(point => {
+                    const dist = map.distance(e.latlng, [point.lat, point.lon]);
+                    if (dist < minDist) {
+                        minDist = dist;
+                        closest = point;
+                    }
+                });
+
+                if (minDist < 30) {  // Reduced threshold to 30 meters
+                    tooltip.style.display = 'block';
+                    tooltip.style.left = e.originalEvent.pageX + 15 + 'px';
+                    tooltip.style.top = e.originalEvent.pageY + 15 + 'px';
+                    tooltip.innerHTML = `
+                        <strong>Time:</strong> ${closest.time.toFixed(1)}s<br>
+                        <strong>Speed:</strong> ${closest.speed.toFixed(1)} km/h<br>
+                        <strong>Voltage:</strong> ${closest.voltage.toFixed(2)}V<br>
+                        <strong>Coords:</strong> ${closest.lat.toFixed(6)}, ${closest.lon.toFixed(6)}
+                    `;
+                    
+                    // Update highlight marker
+                    highlightMarker.setLatLng([closest.lat, closest.lon])
+                                   .setRadius(closest.speed/5 + 3);
+                } else {
+                    tooltip.style.display = 'none';
+                    highlightMarker.setRadius(0);
+                }
+            });
+        }
+
+        // Additional improvements
+        function setupUI() {
+            // Add chart tooltip
+            const chartTooltip = d3.select("body").append("div")
+                .attr("id", "chartTooltip")
+                .style("position", "absolute")
+                .style("display", "none")
+                .style("background", "white")
+                .style("padding", "8px")
+                .style("border", "1px solid #ddd");
+
+            svg.selectAll(".dot")
+                .data(allData)
+                .enter().append("circle")
+                .attr("class", "data-point")
+                .attr("cx", d => x(d.time))
+                .attr("cy", d => y(d.speed))
+                .attr("r", 2)
+                .style("opacity", 0)
+                .on("mouseover", (event, d) => {
+                    chartTooltip.style("display", "block")
+                        .html(`Time: ${d.time.toFixed(1)}s<br>Speed: ${d.speed.toFixed(1)} km/h`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", () => chartTooltip.style("display", "none"));
+        }
+
+        // Add measurement tool
+        let measureControl;
+        function initMapView() {
+            // Previous initialization code
+            
+            // Add measurement tool
+            measureControl = new L.Control.Measure({
+                position: 'topleft',
+                primaryLengthUnit: 'meters',
+                secondaryLengthUnit: 'kilometers',
+                primaryAreaUnit: 'sqmeters'
+            });
+            measureControl.addTo(map);
+        }
+    </script>
+</body>
+</html>

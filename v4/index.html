@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CeleMeter</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-measure@3.1.0/dist/leaflet-measure.css" />
+    <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="nav-bar">
+            <button id="homeBtn" class="btn tab active" onclick="showPage('home')">Home</button>
+            <button id="mapBtn" class="btn tab" onclick="showPage('map')" disabled>Map</button>
+            <button id="graphBtn" class="btn tab" onclick="showPage('graph')" disabled>Graph</button>
+
+            <div id="message" class="message">
+
+            </div>
+            <div id="openFileName" class="message">
+
+            </div>
+
+            <button id="uploadBtn" class="btn upload" 
+                    onclick="document.getElementById('fileInput').click()">
+                    Upload
+            </button>
+        </div>
+
+        <div class="page active" id="homePage">
+            <h1>CeleMeter</h1>
+            <p>Thorbecke is beter</p>
+            <input type="file" id="fileInput" accept=".txt">
+        </div>
+
+        <div class="page" id="mapPage">
+            <h1>Map</h1>
+            <div id="map"></div>
+        </div>
+
+        <div class="page" id="graphPage">
+            <h1>Graph</h1>
+        </div>
+
+        <div class="drag-drop-overlay" id="dropZone">
+            <h2>Drop file here</h2>
+        </div>
+
+
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/leaflet-measure@3.1.0/dist/leaflet-measure.min.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>

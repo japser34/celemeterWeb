@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Race Car Data Analyzer</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-measure@3.1.0/dist/leaflet-measure.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="top-bar">
+        <button class="tab-btn active" onclick="showPage('upload')">Upload</button>
+        <button class="tab-btn" onclick="showPage('graph')" id="btnGraph" disabled>Graph</button>
+        <button class="tab-btn" onclick="showPage('map')" id="btnMap" disabled>Map</button>
+    </div>
+
+    <div id="uploadPage" class="page active">
+        <div id="dropZone">
+            Drag and drop data file here or<br>
+            <input type="file" id="fileInput" accept=".txt">
+        </div>
+    </div>
+
+    <div id="graphPage" class="page">
+        <div class="columns-selector" id="columnsSelector"></div>
+        <div id="chart" class="chart-container"></div>
+    </div>
+
+    <div id="mapPage" class="page">
+        <div id="map"></div>
+    </div>
+
+    <div id="tooltip"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-measure@3.1.0/dist/leaflet-measure.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
