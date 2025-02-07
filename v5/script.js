@@ -1,6 +1,7 @@
 let map = null;
 let data = {}; 
-// data = {[\data\], \hasgps bool\, \timeoffset float\, \polyline\}
+// data = {[\data\], \timeoffset float\, \hasGPS bool\, \GoeJSON\}
+let 
 
 /// --- NAV --- ///
 
@@ -28,9 +29,6 @@ function showPage(pageId) {
 
 // map
 
-let polyline = null;
-
-
 function showMap() {
     if (!map) {
         map = L.map('map', {
@@ -52,8 +50,12 @@ function showMap() {
    updateMapVisualization();
 }
 
-function updateMapVisualization() {
-
+function updateMapVisualization(fileName) {
+   let rawFileName = fileName
+   if (!data[fileName][1]) {
+      popup(`File ${rawFileName} has no GPS.`)
+      return
+   }
 }
 
 
@@ -71,6 +73,22 @@ function popup(message) {
    }, 3000);
 
 }
+
+function getOriginalFilename(filenameWithTimestamp, splitter="_") {
+  const parts = filenameWithTimestamp.split(splitter);
+
+  if (parts.length === 1) {
+    return filenameWithTimestamp;
+  }
+
+  parts.pop(); //removes the last part
+
+  return parts.join(splitter);
+}
+
+
+
+
 
 
 
@@ -124,7 +142,6 @@ async function processFile(file) {
    data[fileName][0] = convertedData;
    data[fileName][1] = hasGPS;
    data[fileName][2] = timeOffset;
-   data[fileName][3] = null;
 
 
    document.getElementById('mapBtn').disabled = !hasGPS;
