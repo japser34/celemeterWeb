@@ -139,9 +139,11 @@ async function processFile(file) {
    const {convertedData, hasGPS, timeOffset} = await convertData(rawData);
    const timestamp = Date.now();
    const fileName = `${file.name}_${timestamp}`;
+   const geoJSON = await generateGeoJSON(convertedData);
    data[fileName][0] = convertedData;
    data[fileName][1] = timeOffset;
    data[fileName][2] = hasGPS;
+   data[fileName][3] = geoJSON;
 
 
    document.getElementById('mapBtn').disabled = !hasGPS;
@@ -161,10 +163,10 @@ async function convertData(rawData) {
 
       try {
          const parts = line.split(/[:<]/)[1].split(',');
-         if (!hasGPS && !isNaN(parseFloat(parts[9])) && !isNaN(parseFloat(parts[10]))) {
+         segments = convertDataSegments(parts);
+         if (!hasGPS && !isNaN(segments.gpsLat) && !isNaN(segments.gpsLon)) {
             hasGPS = true
          }
-         segments = convertDataSegments(parts);
          if (isFirstLine) {
             timeOffset = segments.time;
             console.log('Converting', line)
@@ -178,6 +180,11 @@ async function convertData(rawData) {
    });
 
    return { convertedData, hasGPS, timeOffset}
+}
+
+async function generateGeoJSON (rawData) {
+   let GeoJSON = [];
+   
 }
 
 function convertDataSegments(parts) {
