@@ -1,6 +1,6 @@
 let map = null;
 let data = {}; 
-// data = {[\data\], \timeoffset float\, \hasGPS bool\, \GoeJSON\}
+// data = {\data[] float\, \timeoffset float\, \hasGPS bool\, \GeoJSON\
 let 
 
 /// --- NAV --- ///
@@ -52,7 +52,7 @@ function showMap() {
 
 function updateMapVisualization(fileName) {
    let rawFileName = fileName
-   if (!data[fileName][1]) {
+   if (!data[fileName][2]) {
       popup(`File ${rawFileName} has no GPS.`)
       return
    }
@@ -140,8 +140,8 @@ async function processFile(file) {
    const timestamp = Date.now();
    const fileName = `${file.name}_${timestamp}`;
    data[fileName][0] = convertedData;
-   data[fileName][1] = hasGPS;
-   data[fileName][2] = timeOffset;
+   data[fileName][1] = timeOffset;
+   data[fileName][2] = hasGPS;
 
 
    document.getElementById('mapBtn').disabled = !hasGPS;
