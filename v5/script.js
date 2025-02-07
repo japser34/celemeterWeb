@@ -1,7 +1,11 @@
 let map = null;
 let data = {}; 
 // data = {\data[] float\, \timeoffset float\, \hasGPS bool\, \GeoJSON\
-let 
+let GeoJSON = {
+   "type": "FeatureCollection",
+   "features": [
+  ]
+}
 
 /// --- NAV --- ///
 
@@ -51,11 +55,12 @@ function showMap() {
 }
 
 function updateMapVisualization(fileName) {
-   let rawFileName = fileName
+   let rawFileName = getOriginalFilename(fileName);
    if (!data[fileName][2]) {
       popup(`File ${rawFileName} has no GPS.`)
       return
    }
+
 }
 
 
@@ -183,8 +188,17 @@ async function convertData(rawData) {
 }
 
 async function generateGeoJSON (rawData) {
-   let GeoJSON = [];
-   
+   rawData.forEach((part, i) => {
+      rawData[i] = [part.gpsLat, part.gpsLon]
+   });
+
+   return {
+    type: "Feature",
+    geometry: {
+      type: "LineString",
+      coordinates: rawData
+    }
+  };
 }
 
 function convertDataSegments(parts) {
