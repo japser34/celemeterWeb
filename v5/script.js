@@ -1,5 +1,6 @@
 let map = null;
-let data = {};
+let data = {}; 
+// data = {[\data\], \hasgps bool\, \timeoffset float\, \polyline\}
 
 /// --- NAV --- ///
 
