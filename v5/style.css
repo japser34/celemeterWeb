@@ -4,7 +4,6 @@ html, body {
    font-family: Arial, Helvetica, sans-serif;
 }
 
-
 .nav-bar {
    background-color: #bbbbbb;
    padding: 10px;
@@ -68,6 +67,14 @@ html, body {
    display: block;
 }
 
+#mapPage {
+   margin: 0px;
+}
+
+#map {
+   height: calc(100vh - 56px);
+   width: 100%;
+}
 
 .drag-drop-overlay {
    position: fixed;

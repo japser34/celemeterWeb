@@ -1,4 +1,5 @@
 let map = null;
+let data = {};
 
 /// --- NAV --- ///
 
@@ -117,6 +118,13 @@ function handleFileDrop(files) {
 async function processFile(file) {
    const rawData = await file.text();
    const {convertedData, hasGPS, timeOffset} = await convertData(rawData);
+   const timestamp = Date.now();
+   const fileName = `${file.name}_${timestamp}`;
+   data[fileName][0] = convertedData;
+   data[fileName][1] = hasGPS;
+   data[fileName][2] = timeOffset;
+   data[fileName][3] = null;
+
 
    document.getElementById('mapBtn').disabled = !hasGPS;
    document.getElementById('graphBtn').disabled = false;
