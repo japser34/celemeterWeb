@@ -1,0 +1,96 @@
+html, body {
+   margin: 0;
+   padding: 0;
+   font-family: Arial, Helvetica, sans-serif;
+}
+
+.nav-bar {
+   background-color: #bbbbbb;
+   padding: 10px;
+   gap: 10px;
+   display: flex;
+}
+
+.btn {
+   background-color: #246812;
+   color: #dee4e7;
+   border: none;
+   border-radius: 15px;
+   padding: 10px 20px;
+   cursor: pointer;
+}
+
+.btn.tab.active {
+   background-color: #165307 !important;
+   border-radius: 5px !important;
+}
+
+.btn.tab:disabled {
+   background-color: #667264;
+   cursor: not-allowed;
+}
+
+#uploadBtn {
+   margin-left: auto;
+}
+
+#settingsBtn {
+   display: none;
+}
+
+
+.popup {
+   background-color: #dee4e7;
+   color: #1e690b;
+   border-radius: 15px;
+   padding: 10px 30px;
+   position: absolute;
+   top: -30px;
+   left: 50%;
+   opacity: 0;
+   transition: padding 0.6s ease, opacity 0.3s ease;
+}
+
+.popup.active {
+   opacity: 1;
+   top: 10px;
+   left: 50%;
+}
+
+
+.page {
+   margin: 30px;
+   display: none;
+}
+
+.page.active {
+   display: block;
+}
+
+#mapPage {
+   margin: 0px;
+}
+
+#map {
+   height: calc(100vh - 56px);
+   width: 100%;
+}
+
+.drag-drop-overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: #00000081;
+   color: #fff;
+   display: none;
+   justify-content: center;
+   align-items: center;
+   z-index: 1000;
+   pointer-events: none;
+}
+
+.drag-drop-overlay.active {
+   display: flex;
+}

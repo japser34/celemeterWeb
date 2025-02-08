@@ -6,6 +6,33 @@ let GeoJSON = {
    "features": [
   ]
 }
+`
+{
+   "type": "FeatureCollection",
+   "features": [
+   {
+      "type": "Feature",
+      "geometry": {
+         "type": "Point",
+            "coordinates": [
+               [102.0, 0.5],
+               [102.0, 0.5],
+               [102.0, 0.5],
+               [102.0, 0.5],
+               [102.0, 0.5],
+            ]
+         },
+         "properties": {
+            "data": {
+               []
+            },
+            "hasGPS": "true",
+            "timeOffset": "100"
+         }
+      },
+   ]
+}
+`
 
 /// --- NAV --- ///
 
